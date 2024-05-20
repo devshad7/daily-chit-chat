@@ -25,7 +25,7 @@ const Navbar = () => {
     return (
         <>
         <Toaster />
-            <div className="flex py-6 px-8 items-center justify-between fixed w-full md:px-10 lg:px-14 xl:px-16 xl:py-10 shadow-sm z-50 bg-white">
+            <div className="flex py-6 px-8 items-center justify-between fixed w-full md:px-10 lg:px-14 xl:px-16 xl:py-10 shadow-sm z-50">
                 <div className="">
                     <Link href={'/chit-chat'} className='no-tap-highlight'>
                     <h1 className='font-bold text-2xl'>Chit Chat</h1>
