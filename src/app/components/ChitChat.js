@@ -27,6 +27,7 @@ const ChitChat = () => {
        else {
         setEmail("No User")
         setName("No User")
+        router.push('/')
       }
     })
   }, [])

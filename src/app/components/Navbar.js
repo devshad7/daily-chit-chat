@@ -1,7 +1,7 @@
 'use client'
 
 import { auth } from '@/utils/firebaseConfig'
-import { Popover, PopoverButton, PopoverPanel, Transition } from '@headlessui/react'
+import { Popover, PopoverButton, PopoverPanel } from '@headlessui/react'
 import { signOut } from 'firebase/auth'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -16,7 +16,7 @@ const Navbar = () => {
         signOut(auth)
             .then((res) => {
                 toast.success("Logged Out")
-                router.push('/auth/login')
+                router.push('/')
             }).catch((error) => {
                 toast.error("Something went wrong...")
             })

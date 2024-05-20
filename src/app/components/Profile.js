@@ -1,12 +1,14 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import Navbar from './Navbar'
 import { onAuthStateChanged, updateProfile } from 'firebase/auth';
 import { auth } from '@/utils/firebaseConfig';
 import toast, { Toaster } from 'react-hot-toast';
+import { useRouter } from 'next/navigation';
 
 const Profile = () => {
+
+    const router = useRouter()
 
     const [name, setName] = useState("No User");
     const [email, setEmail] = useState("No User");
@@ -25,6 +27,7 @@ const Profile = () => {
             } else {
                 setName("No User");
                 setEmail("No User");
+                router.push('/')
             }
         })
     }, [])
