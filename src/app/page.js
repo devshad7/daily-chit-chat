@@ -6,7 +6,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/utils/firebaseConfig";
 import Login from "./components/Login";
 
-export default function page() {
+function page() {
 
   const router = useRouter()
 
@@ -26,3 +26,5 @@ export default function page() {
     </>
   );
 }
+
+export default page;
