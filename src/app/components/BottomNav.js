@@ -25,7 +25,8 @@ const BottomNav = () => {
         })
     }, [])
 
-    const sendMessage = () => {
+    const sendMessage = (event) => {
+        event.preventDefault();
         if (userMessage == "") {
             toast.error("Enter Message")
         } else {
@@ -45,6 +46,12 @@ const BottomNav = () => {
         }
     }
 
+    const handleSubmit = (event) => {
+        if (event.key === 'Enter') {
+            sendMessage(event)
+        }
+    }
+
     return (
         <>
             <Toaster />
@@ -58,6 +65,7 @@ const BottomNav = () => {
                     type="text"
                     name="text"
                     id="text"
+                    onKeyDown={handleSubmit}
                     value={userMessage}
                     onChange={(e) => setUserMessage(e.target.value)}
                     className="block w-3/4 xl:w-2/4 rounded-md border-0 py-3 pl-5 xl:pl-7 pr-5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-0 focus:ring-inset focus:ring-indigo-400 sm:text-sm sm:leading-6"
