@@ -12,7 +12,20 @@ module.exports = {
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
+      boxShadow: {
+        'top': '0 -2px 2px -1px rgba(0 0 0 / 0.05)',
+      },
     },
   },
-  plugins: [],
+  plugins: [
+    function ({ addUtilities }) {
+      const newUtilities = {
+        '.no-tap-highlight': {
+          '-webkit-tap-highlight-color': 'transparent',
+          'outline': 'none',
+        },
+      }
+      addUtilities(newUtilities)
+    }
+  ],
 };
