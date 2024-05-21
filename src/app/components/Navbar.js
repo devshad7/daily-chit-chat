@@ -33,8 +33,8 @@ const Navbar = () => {
                 </div>
                 <Popover className="relative mr-3">
                     <PopoverButton className={'focus:outline-none no-tap-highlight'}>
-                        <div className="cursor-pointer bg-indigo-600 rounded-full p-2 hover:bg-indigo-500 hover:transition-all">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-white">
+                        <div className="cursor-pointer rounded-full p-2 hover:bg-slate-100 hover:transition-all">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
                             </svg>
                         </div>

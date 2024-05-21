@@ -17,7 +17,7 @@ const Chat = () => {
             const docs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
             const sortedData = docs.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
             setData(sortedData.reverse())
-            console.log(snapshot.metadata);
+            console.log(sortedData);
         });
 
         return () => unsubscribe();
@@ -26,29 +26,30 @@ const Chat = () => {
 
     useEffect(() => {
         const scrollToBottom = () => {
-          messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+            messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
         };
         scrollToBottom();
-      }, [data]);
+    }, [data]);
 
     return (
         <>
             <div className='pb-24 pt-28 h-full flex flex-col gap-6 px-8 xl:pt-36 xl:pb-32 xl:px-16 overflow-y-auto scrollbar'>
                 {data.map(chat => (
-                    <div className={`flex gap-2 py-3 px-4 rounded-lg ${chat.uid === currentUser?.uid ? 'self-end bg-indigo-50 rounded-br-none' : 'self-start bg-indigo-50 rounded-bl-none'}`} key={chat.id}>
+                    <div className={`flex gap-1 py-2 px-4 rounded-lg ${chat.uid === currentUser?.uid ? 'self-end bg-blue-400 text-white rounded-br-none' : 'self-start bg-blue-50 rounded-bl-none'}`} key={chat.id}>
                         <div className="">
                             <img
                                 src={chat.photo ? chat.photo : "/assets/profile.svg"}
                                 alt=""
-                                className='w-6 h-6 rounded-full opacity-40'
+                                className={`w-6 h-6 rounded-full ${chat.uid === currentUser?.uid ? 'opacity-100 bg-white' : 'opacity-40'}`}
                             />
                         </div>
                         <div className="leading-none flex flex-col">
-                            <div className=" text-sm">
-                                <b>{chat.name}</b>
+                            <div className=" text-xs">
+                                <b>{chat.uid === currentUser?.uid ? 'Me' : chat.name}</b>
                             </div>
-                            <div className="w-40 relative leading-[18px] text-xs">
-                                <p>{chat.message}</p>
+                            <div className="w-auto max-w-40 flex justify-between relative leading-[15px]">
+                                <p className='text-[10px]'>{chat.message}</p>
+                                <i className='text-[8px] relative top-1 left-1 pl-1'>{chat.createdTime}</i>
                             </div>
                         </div>
                     </div>

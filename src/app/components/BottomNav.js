@@ -14,6 +14,7 @@ const BottomNav = () => {
     const [userId, setUserId] = useState("");
     const [userMessage, setUserMessage] = useState("");
     const [photoUrl, setPhotoUrl] = useState("");
+    const [time, setTime] = useState("");
 
     useEffect(() => {
         onAuthStateChanged(auth, (user) => {
@@ -25,6 +26,14 @@ const BottomNav = () => {
         })
     }, [])
 
+    useEffect(() => {
+        const timeId = setInterval(() => {
+            setTime(new Date().toLocaleTimeString('en-us', { hour: '2-digit', minute: '2-digit', hour12: false }))
+        }, 1000)
+
+        return () => clearInterval(timeId);
+    }, [])
+
     const sendMessage = (event) => {
         event.preventDefault();
         if (userMessage == "") {
@@ -34,6 +43,7 @@ const BottomNav = () => {
                 name: userName,
                 message: userMessage,
                 uid: userId,
+                createdTime: time,
                 createdAt: serverTimestamp(),
             }).then((res) => {
                 toast.success("Sent")
