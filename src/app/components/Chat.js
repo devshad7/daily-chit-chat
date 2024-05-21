@@ -33,7 +33,7 @@ const Chat = () => {
 
     return (
         <>
-            <div className='top-[5.7rem] py-6 h-[82vh] flex flex-col gap-6 relative px-8 xl:top-[7.5rem] xl:py-8 xl:px-16 xl:h-[70vh] overflow-y-auto scrollbar'>
+            <div className='pb-24 pt-28 h-full flex flex-col gap-6 px-8 xl:pt-36 xl:pb-32 xl:px-16 overflow-y-auto scrollbar'>
                 {data.map(chat => (
                     <div className={`flex gap-2 py-3 px-4 rounded-lg ${chat.uid === currentUser?.uid ? 'self-end bg-indigo-50 rounded-br-none' : 'self-start bg-indigo-50 rounded-bl-none'}`} key={chat.id}>
                         <div className="">
