@@ -17,7 +17,6 @@ const Login = () => {
     const loginUser = () => {
         signInWithEmailAndPassword(auth, email, password)
             .then((res) => {
-                console.log(res.user);
                 setEmail("")
                 setPassword("")
                 router.push('/chit-chat')

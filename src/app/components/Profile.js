@@ -23,7 +23,6 @@ const Profile = () => {
                 setName(user.displayName);
                 setEmail(user.email);
                 setProfilePhoto(user.photoURL)
-                console.log(user);
             } else {
                 setName("No User");
                 setEmail("No User");
@@ -48,12 +47,12 @@ const Profile = () => {
                 displayName: upName
             }).then((res) => {
                 toast.success("Updated Profile")
-                console.log(res);
                 setDisable(true)
                 setLoading(false)
                 setUpName("")
             }).catch((error) => {
                 setLoading(false)
+                console.log(error.message);
                 toast.error("Something went wrong...")
             })
         }

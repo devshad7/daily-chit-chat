@@ -48,7 +48,6 @@ const BottomNav = () => {
             }).then((res) => {
                 toast.success("Sent")
                 setUserMessage("")
-                console.log(res);
             }).catch((error) => {
                 toast.error('Not Sent');
                 console.log(error.message);

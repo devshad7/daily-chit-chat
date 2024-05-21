@@ -1,6 +1,7 @@
 import { auth, db } from '@/utils/firebaseConfig'
-import { collection, onSnapshot, orderBy, query } from 'firebase/firestore'
+import { collection, deleteDoc, doc, onSnapshot, orderBy, query } from 'firebase/firestore'
 import React, { useEffect, useRef, useState } from 'react'
+import toast from 'react-hot-toast'
 
 const Chat = () => {
 
@@ -17,7 +18,6 @@ const Chat = () => {
             const docs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
             const sortedData = docs.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
             setData(sortedData.reverse())
-            console.log(sortedData);
         });
 
         return () => unsubscribe();
@@ -30,6 +30,17 @@ const Chat = () => {
         };
         scrollToBottom();
     }, [data]);
+
+    const deleteMsg = (messageId) => {
+        const messageDoc = doc(dbCollection, messageId);
+        deleteDoc(messageDoc)
+            .then((res) => {
+                toast.success("Deleted")
+            }).catch((error) => {
+                console.log(error.message);
+                toast.error("Not Deleted")
+            })
+    }
 
     return (
         <>
@@ -44,8 +55,15 @@ const Chat = () => {
                             />
                         </div>
                         <div className="leading-none flex flex-col">
-                            <div className=" text-xs">
+                            <div className="flex justify-between text-xs">
                                 <b>{chat.uid === currentUser?.uid ? 'Me' : chat.name}</b>
+                                {chat.uid === currentUser?.uid && (
+                                    <div className=" relative left-2 cursor-pointer rounded-full" onClick={() => deleteMsg(chat.id)}>
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z" />
+                                        </svg>
+                                    </div>
+                                )}
                             </div>
                             <div className="w-auto max-w-40 flex justify-between relative leading-[15px]">
                                 <p className='text-[10px]'>{chat.message}</p>
