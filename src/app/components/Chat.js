@@ -1,4 +1,5 @@
 import { auth, db } from '@/utils/firebaseConfig'
+import { onAuthStateChanged } from 'firebase/auth'
 import { collection, deleteDoc, doc, onSnapshot, orderBy, query } from 'firebase/firestore'
 import React, { useEffect, useRef, useState } from 'react'
 import toast from 'react-hot-toast'
@@ -7,6 +8,7 @@ const Chat = () => {
 
     const [data, setData] = useState([])
     const messagesEndRef = useRef(null)
+    const [profileImg, setProfileImg] = useState(null)
 
     const currentUser = auth.currentUser;
 
@@ -22,6 +24,12 @@ const Chat = () => {
 
         return () => unsubscribe();
 
+    }, [])
+
+    useEffect(() => {
+        onAuthStateChanged(auth, (user) => {
+            setProfileImg(user.photoURL)
+        })
     }, [])
 
     useEffect(() => {
@@ -49,9 +57,9 @@ const Chat = () => {
                     <div className={`flex gap-1 py-2 px-4 rounded-lg ${chat.uid === currentUser?.uid ? 'self-end bg-blue-400 text-white rounded-br-none' : 'self-start bg-blue-50 rounded-bl-none'}`} key={chat.id}>
                         <div className="">
                             <img
-                                src={chat.photo ? chat.photo : "/assets/profile.svg"}
+                                src={profileImg ? profileImg : "/assets/profile.svg"}
                                 alt=""
-                                className={`w-6 h-6 rounded-full ${chat.uid === currentUser?.uid ? 'opacity-100 bg-white' : 'opacity-40'}`}
+                                className={`w-6 h-6 rounded-full ${chat.uid === currentUser?.uid ? 'opacity-100 bg-white' : 'opacity-100'}`}
                             />
                         </div>
                         <div className="leading-none flex flex-col">

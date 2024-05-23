@@ -33,8 +33,6 @@ const Profile = () => {
         })
     }, [])
 
-    console.log(auth.currentUser);
-
     const enableField = () => {
         setDisable(false)
         setUpName(name)
