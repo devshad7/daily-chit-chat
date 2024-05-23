@@ -2,9 +2,10 @@
 
 import { useEffect, useState } from 'react'
 import { onAuthStateChanged, updateProfile } from 'firebase/auth';
-import { auth } from '@/utils/firebaseConfig';
+import { auth, dbStorage } from '@/utils/firebaseConfig';
 import toast, { Toaster } from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
+import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 
 const Profile = () => {
 
@@ -16,6 +17,7 @@ const Profile = () => {
     const [disable, setDisable] = useState(true);
     const [upName, setUpName] = useState("");
     const [loading, setLoading] = useState(false);
+    const [url, setUrl] = useState("");
 
     useEffect(() => {
         onAuthStateChanged(auth, (user) => {
@@ -31,6 +33,8 @@ const Profile = () => {
         })
     }, [])
 
+    console.log(auth.currentUser);
+
     const enableField = () => {
         setDisable(false)
         setUpName(name)
@@ -44,9 +48,9 @@ const Profile = () => {
             setLoading(false)
         } else {
             updateProfile(auth.currentUser, {
-                displayName: upName
+                displayName: upName,
             }).then((res) => {
-                toast.success("Updated Profile")
+                toast.success("Profile Updated")
                 setDisable(true)
                 setLoading(false)
                 setUpName("")
@@ -58,11 +62,53 @@ const Profile = () => {
         }
     }
 
+    const handleFileChange = (e) => {
+        e.preventDefault()
+        const selectedFile = e.target.files[0];
+
+        if (!selectedFile) return;
+
+        if (selectedFile) {
+            const reader = new FileReader();
+            reader.onload = () => {
+                setProfilePhoto(reader.result);
+            };
+            reader.readAsDataURL(selectedFile);
+        }
+
+        if (!selectedFile) return;
+
+        const storageRef = ref(dbStorage, `uploads/${selectedFile.name}`)
+        const uploadTask = uploadBytesResumable(storageRef, selectedFile)
+
+        uploadTask.then(() => getDownloadURL(uploadTask.snapshot.ref))
+            .then((downloadURL) => {
+                updateProfile(auth.currentUser, {
+                    photoURL: downloadURL
+                }).then(() => {
+                    toast.success('Photo Updated')
+                })
+            }).catch((error) => {
+                toast.error("Failed");
+                console.log(error.message);
+            })
+    };
+
     return (
         <>
             <Toaster />
             <div className='justify-center flex flex-col items-center top-32 relative px-8 xl:top-36 xl:px-16'>
-                <img src={profilePhoto ? profilePhoto : '/assets/profile.svg'} alt="" className='w-20 h-20 rounded-full' />
+                <div className="profile-pic">
+                    <label className="-label" htmlFor="file">
+                        <span><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M6.827 6.175A2.31 2.31 0 0 1 5.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 0 0-1.134-.175 2.31 2.31 0 0 1-1.64-1.055l-.822-1.316a2.192 2.192 0 0 0-1.736-1.039 48.774 48.774 0 0 0-5.232 0 2.192 2.192 0 0 0-1.736 1.039l-.821 1.316Z" />
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 12.75a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0ZM18.75 10.5h.008v.008h-.008V10.5Z" />
+                        </svg>
+                        </span>
+                    </label>
+                    <input id="file" type="file" onChange={handleFileChange} />
+                    <img src={profilePhoto ? profilePhoto : '/assets/profile.svg'} />
+                </div>
                 <div className="mt-4 flex flex-col gap-3">
                     <div className="flex justify-center items-center xl:gap-4">
                         <div className='flex justify-center items-center gap-4'>
@@ -71,7 +117,7 @@ const Profile = () => {
                                 type="text"
                                 disabled={disable}
                                 name="text"
-                                value={upName}
+                                value={upName === null ? "" : upName}
                                 onChange={(e) => setUpName(e.target.value)}
                                 className="rounded-md border-0 py-2 px-3 w-1/2 xl:w-3/4 xl:pl-3 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-0 focus:ring-inset focus:ring-indigo-400 sm:text-sm sm:leading-6"
                                 placeholder={name ? name : "Null"}
