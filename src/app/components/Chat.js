@@ -8,7 +8,6 @@ const Chat = () => {
 
     const [data, setData] = useState([])
     const messagesEndRef = useRef(null)
-    const [profileImg, setProfileImg] = useState(null)
 
     const currentUser = auth.currentUser;
 
@@ -24,12 +23,6 @@ const Chat = () => {
 
         return () => unsubscribe();
 
-    }, [])
-
-    useEffect(() => {
-        onAuthStateChanged(auth, (user) => {
-            setProfileImg(user.photoURL)
-        })
     }, [])
 
     useEffect(() => {
@@ -57,7 +50,7 @@ const Chat = () => {
                     <div className={`flex gap-1 py-2 px-4 rounded-lg ${chat.uid === currentUser?.uid ? 'self-end bg-blue-400 text-white rounded-br-none' : 'self-start bg-blue-50 rounded-bl-none'}`} key={chat.id}>
                         <div className="">
                             <img
-                                src={profileImg ? profileImg : "/assets/profile.svg"}
+                                src={chat.photo ? chat.photo : "/assets/profile.svg"}
                                 alt=""
                                 className={`w-6 h-6 rounded-full ${chat.uid === currentUser?.uid ? 'opacity-100 bg-white' : 'opacity-100'}`}
                             />

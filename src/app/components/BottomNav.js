@@ -43,6 +43,7 @@ const BottomNav = () => {
                 name: userName,
                 message: userMessage,
                 uid: userId,
+                photo: photoUrl,
                 createdTime: time,
                 createdAt: serverTimestamp(),
             }).then((res) => {
